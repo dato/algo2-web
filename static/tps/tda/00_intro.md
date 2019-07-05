@@ -15,6 +15,7 @@ permalink: /tps/intro
 
 
 ## Programas y bibliotecas
+{:#compile}
 
 La mayoría de las entregas de la materia no consistirán en un programa completo sino en una biblioteca. En esta sección se estudian, brevemente, las diferencias entre ambos, y la manera de compilar cada uno.
 
@@ -32,7 +33,7 @@ int main() {
 }
 ```
 
-Este archivo constituye un programa porque la función _main_ está definida.P ara compilarlo, se invoca al compilador pasando como argumento el nombre del archivo:[^dollarprompt]
+Este archivo constituye un programa porque la función _main_ está definida. Para compilarlo, se invoca al compilador pasando como argumento el nombre del archivo:[^dollarprompt]
 
 [^dollarprompt]: En este y otros ejemplos, el caracter `$` indica que lo que sigue es un comando a teclear en la terminal (o intérprete de comandos). Se usa esta convención porque el intérprete muestra dicho símbolo cuando está a la espera de la siguiente orden.
 
@@ -204,18 +205,21 @@ int fib(unsigned i);
 Por tanto, en todas las entregas se pedirá tanto el código fuente (en este caso, _mathbib.c)_ como la cabecera (en este caso, _mathbib.h)_.
 
 
-## Pruebas automáticas
+## Pruebas unitarias
+{:#tests}
 
 Para cualquier programa o biblioteca es útil tener una manera de verificar que la implementación se comporta de la manera esperada. Esto es útil durante el desarrollo, para comprobar que un determinado cambio no modificó el comportamiento de la aplicación de manera no deseada; y también al terminar, para verificar que el comportamiento final es el esperado.
 
-Es muy deseable que este proceso de prueba (o _testing_, en inglés) sea lo menos manual posible. De hecho, lo más deseable es que se trate de un proceso completamente automático, sin ningún paso a realizar “a mano”. En términos prácticos, esto supondría la ejecución de un programa que dica _OK_ o _ERROR_, indicando qué errores se produjeron durante el proceso de prueba.
+Para que las pruebas sean útiles, es imprescindible que el proceso de prueba (o _testing_, en inglés) sea lo menos manual posible. De hecho, lo más deseable es que se trate de un proceso completamente automático, sin ningún paso a realizar “a mano”.
+
+En términos prácticos, esto conlleva la creación de un programa de pruebas que, al ejecutarse, dé como resultado _OK_ si pasaron todas las pruebas, o _ERROR_ si falló alguna, indicando en este caso qué pruebas fallaron y por qué.
 
 A continuación se estudian varias maneras de automatizar las pruebas de la biblioteca _mathbib_, cada una más sofisticada que la anterior.[^progtest]
 
-[^progtest] El proceso de pruebas para un programa con función _main_ se estudiará  en el TP1, que es el primer trabajo práctico que incluye un programa en la entrega.
+[^progtest]: El proceso de pruebas para un programa con función _main_ se estudiará  en el TP1, que es el primer trabajo práctico que incluye un programa en la entrega.
 
 
-### Automatización de las pruebas
+### Código de pruebas
 
 **(1)** En la primera versión de las pruebas, se introduce un programa  _pruebas_mathbib.c_ que incluye una función _main_. Esta función solamente imprime los resultados de invocar a las funciones con diversos parámetros:
 
@@ -351,7 +355,7 @@ Resultado final: Todo OK.
 
 En esta versión, no necesitamos mirar el valor devuelto por las funciones, solo si la prueba dijo _OK_ o no.
 
-### La función _test()_
+### Función ‘verificar_iguales()’
 
 La tercera iteración de las pruebas es más útil desde el punto de vista de quien corre las pruebas, pero el código que produce ese resultado es más tedioso de escribir. No obstante, puede mejorarse introduciendo una función auxiliar, así:
 
@@ -376,14 +380,14 @@ El archivo principal del pruebas quedaría:
 int fallos;  // Definición (siempre junto a main).
 int main() {
     puts("== Pruebas de fact()");
-    test("fact(1)", 1, fact(1));
-    test("fact(4)", 24, fact(4));
-    test("fact(8)", 40320, fact(8));
+    verificar_iguales("fact(1)", 1, fact(1));
+    verificar_iguales("fact(4)", 24, fact(4));
+    verificar_iguales("fact(8)", 40320, fact(8));
 
     puts("\n== Pruebas de fib()");
-    test("fib(2)", 1, fib(2));
-    test("fib(6)", 8, fib(6));
-    test("fib(9)", 34, fib(9));
+    verificar_iguales("fib(2)", 1, fib(2));
+    verificar_iguales("fib(6)", 8, fib(6));
+    verificar_iguales("fib(9)", 34, fib(9));
 
     printf("\nResultado final: %s\n", fallos ? "ERROR": "Todo OK");
 }
@@ -422,11 +426,11 @@ void print_test(const char *msg, int esperado, int real) {
 ```
 
 
-### Pruebas unitarias con ‘ctest’
+### El framework ‘ctest.h’
 
 Este tipo de pruebas que verifican el comportamiento de una función se denominan _pruebas unitarias_ (la unidad de prueba es la función). Existen múltiples herramientas y _frameworks_ para escribirlas, con distinto nivel de funcionalidad. (La función _test()_ de la sección anterior correspondería con un ‘mini-framework’ con funcionalidad muy básica.)
 
-En la materia usaremos un framework de funcionalidad más o meons básica denominado _ctest_. En él, _testing.h_ y _testing.c_ se sustituyen por _ctest.h_, y el archivo _pruebas_mathbib.c_ quedaría así:
+En la materia usaremos un _framework_ de funcionalidad más o meons básica denominado _ctest_. En él, _testing.h_ y _testing.c_ se sustituyen por _ctest.h_, y el archivo _pruebas_mathbib.c_ quedaría así:
 
 ```c
 #define CTEST_MAIN 1
@@ -480,9 +484,100 @@ RESULTS: 4 tests (4 ok, 0 failed, 0 skipped) ran in 0 ms
 
 
 ## Compilación con ‘make’
-
+{:#make}
 
 ## El corrector automático
+{:#corrector}
 
+
+## Resumen
+{:#resumen}
+
+### Compilado
+{:.no_toc}
+
+Para compilar programas y bibliotecas, en el curso usaremos:
+
+  - compilar un programa 'hola' de un solo archivo:
+
+        gcc -g -O2 -std=c99 -Wall -o hola hola.c
+
+    - se corre el programa con `./hola` en la línea de comandos.
+
+  - compilar una biblioteca y sus pruebas:
+
+        gcc -g -O2 -std=c99 -Wall -c biblio.c
+        gcc -g -O2 -std=c99 -Wall -c pruebas.c
+        gcc -o pruebas biblio.o pruebas.o
+
+    - se corren las pruebas con `./pruebas` en la línea de comandos.
+
+  - compilar un programa y biblioteca juntos:
+
+        gcc -g -O2 -std=c99 -Wall -c prog.c
+        gcc -g -O2 -std=c99 -Wall -c biblio.c
+        gcc -o prog prog.o biblio.o
+    - se ejecuta el programa con `./hola` en la línea de comandos.
+
+### Automatización con ‘make’
+{:.no_toc}
+
+El siguiente archivo _Makefile_ permite compilar cualquiera de los tres casos anteriores de manera más cómoda, sin tener que especificar las opciones de compilación cada vez. A continuación se resumen los casos más comunes:
+
+  - para una biblioteca con sus pruebas se puede usar:
+
+        CFLAGS := -g -O2 -std=c99 -Wall
+
+        pruebas: pruebas.o biblio.o
+
+  - para un programa con múltiples archivos fuente:
+
+        CFLAGS := -g -O2 -std=c99 -Wall
+
+        prog: prog.o auxiliar.o biblio.o
+
+Para compilar en ambos casos, es suficiente especificar la orden `make` en la línea de comandos.
+
+
+### Pruebas unitarias
+{:.no_toc}
+
+ - Las pruebas automáticas deben ser, eso, lo más automáticas posible. En lugar de _imprimir_ los resultados para ser verificados a mano, las propias pruebas _verifican_ que lo obtenido es correcto.
+
+ - En unas pruebas hechas a mano, eso significa código como el siguiente:
+
+   ```c
+   int esperado = 24;
+   int real = fact(4);
+
+   if (real != esperado) {
+       printf("fact(4) = %d, esperaba %d\n, real, esperado);
+   }
+   ```
+
+ - Usando _ctest.h_, la misma prueba se escribe:
+
+   ```c
+   ASSERT_EQUAL(24, fact(4));
+   ```
+
+ - El esqueleto de unas pruebas con _ctest.h_ es:
+
+    ```c
+    // Archivo pruebas.c
+    #define CTEST_MAIN 1
+    #define ctest_main main
+
+    #include "ctest.h"
+    #include "mathbib.h"
+
+    CTEST(factorial, casos_base) {
+        ASSERT_EQUAL(...);
+    }
+
+    CTEST(factorial, casos_generales) {
+        ASSERT_EQUAL(...);
+    }
+    ```
 
 {% include footnotes.html %}
