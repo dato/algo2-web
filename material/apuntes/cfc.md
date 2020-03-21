@@ -1,29 +1,27 @@
 ---
-title: "Componentes Fuertemente Conexas"
-permalink: /material/apuntes/cfc
 math: true
 ---
 
-# Componente Fuertemente Conexa (CFC)
+# Componentes Fuertemente Conexas (CFC)
 
-Una [componente fuertemente conexa](https://en.wikipedia.org/wiki/Strongly_connected_component) 
-de un **grafo dirigido** es un conjunto de vértices dentro del grafo donde todos esos vértices se conectan todos 
-entre sí (existe un camino de cualquiera de esos vértices, a cualquier otro). 
-Un grafo dirigido puede tener ninguna, una o más _CFC_'s. Vale aclarar que nos interesan obtener las CFC más grandes 
+Una [componente fuertemente conexa](https://en.wikipedia.org/wiki/Strongly_connected_component)
+de un **grafo dirigido** es un conjunto de vértices dentro del grafo donde todos esos vértices se conectan todos
+entre sí (existe un camino de cualquiera de esos vértices, a cualquier otro).
+Un grafo dirigido puede tener ninguna, una o más _CFC_'s. Vale aclarar que nos interesan obtener las CFC más grandes
 (dentro de cualquier CFC, cualquier subconjunto de ésta va a ser una CFC en sí).
 
 ## Algoritmo de Tarjan
 
-Para resolver este problema, vamos a utilizar el [Algoritmo de Tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm). Existe alternativamente el 
+Para resolver este problema, vamos a utilizar el [Algoritmo de Tarjan](https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm). Existe alternativamente el
 [Algoritmo de Kosaraju](https://en.wikipedia.org/wiki/Kosaraju%27s_algorithm), que no analizaremos en este apunte.
 
-La idea del algoritmo de Tarjan es realizar un recorrido en profundidad (DFS), contando con dos pilas, _S_ y _P_, 
-y el orden del recorrido en profundidad, respecto de la exploración en profundidad. Para cada vértice no visitado ponemos su orden en 0 y: 
+La idea del algoritmo de Tarjan es realizar un recorrido en profundidad (DFS), contando con dos pilas, _S_ y _P_,
+y el orden del recorrido en profundidad, respecto de la exploración en profundidad. Para cada vértice no visitado ponemos su orden en 0 y:
 1. Marcamos a _v_ como visitado, con su orden.
-1. Apilar al vértice en _S_ y _P_. 
+1. Apilar al vértice en _S_ y _P_.
 1. Para cada vértice _w_ adyacente a _v_:
 	* Si no fue visitado, visitarlo (recursivamente).
-	* Si ya fue visitado, si no está ya en una CFC: desapilar de _P_ hasta que el tope tenga un orden menor o igual al 
+	* Si ya fue visitado, si no está ya en una CFC: desapilar de _P_ hasta que el tope tenga un orden menor o igual al
 	de _w_.
 1. Si _v_ es tope de _P_:
 	a. Desapilar de _S_ hasta llegar a tener de tope a _v_, y agregar todos los vértices a una CFC.

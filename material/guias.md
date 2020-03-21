@@ -1,9 +1,3 @@
----
-title: Guías del Curso
-permalink: /material/guias/
-math: true
----
-
 # Guías de ejercicios
 
 A continuación pueden encontrarse las guías de ejercicios de los distintos temas del curso. Todas las guías cuentan con un ejercicio resuelto y con una tanda de ejercicios. Los ejercicios propuestos están puntuados del 1 a 5 estrellas (★) en dificultad (no de forma exacta, sino para que usen de guía).
