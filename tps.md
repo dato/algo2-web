@@ -1,10 +1,5 @@
----
-title: TPs
-permalink: /tps/
----
-
 TPs
-=======
+===
 
 A continuación encontrarán las entregas que iremos planteando a lo largo de la
 materia.

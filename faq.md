@@ -1,11 +1,9 @@
 ---
-title: FAQ
-permalink: /faq/
 math: true
 ---
 
 Preguntas frecuentes
-=========
+====================
 
 * [Preguntas generales](general)
 
