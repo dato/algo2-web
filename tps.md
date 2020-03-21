@@ -20,7 +20,7 @@ Las entregas están acompañadas de archivos adjuntos, todos ubicados en [el sit
     </tr>
   </tbody>
 </table>
- 
+
  <h4 id="trabajo"></h4>
- 
- <script src="{{ '/assets/js/publicacionTPs.js' | relative_url }}"></script> 
+
+ <script src="{{ '/assets/js/publicacionTPs.js' | relative_url }}"></script>
